@@ -1,4 +1,4 @@
-#How Charging Stations affecct EV adoption
+## How Charging Stations Affect EV Adoption
 ## INFO 201 "Foundational Skills for Data Science"
 
 Authors: George Lee
