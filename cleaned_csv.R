@@ -36,11 +36,12 @@ refined_charging_stations_df <- refined_charging_stations_df %>%
 refined_charging_stations_df <- refined_charging_stations_df %>%
   group_by(COUNTY.NAME) %>%
   summarise(Num_EV_Stations = n(), .groups = 'drop')%>%
-  filter(!is.na(COUNTY.NAME))
+  filter(!is.na(Num_EV_Stations))
 
 
 #join stations with EV surroudings
 combined_df <- left_join(ev_sales_washington,refined_charging_stations_df, by = c( "County" = "COUNTY.NAME"))
+combined_df <- distinct(combined_df, .keep_all = FALSE)
 
 #create a summary table for findings related to charging station numbers
 
@@ -58,4 +59,12 @@ combined_df <- combined_df %>%
         Num_EV_Stations>summary_df$`median(combined_df$Num_EV_Stations, na.rm = TRUE)`
   )
 
-#add new numerical variable that provides a percentage for  
+#add an numerical variable that provides each county with a percentage of 
+#how many charging stations they have of the total number in Washington.
+total_charger_number <- sum(combined_df$Num_EV_Stations, na.rm = TRUE)
+
+
+combined_df<- combined_df %>%
+  mutate(percent_EV_stations= 
+       Num_EV_Stations/total_charger_number*100)
+         
