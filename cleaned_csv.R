@@ -47,4 +47,15 @@ combined_df <- left_join(ev_sales_washington,refined_charging_stations_df, by = 
 
 summary_df <- combined_df %>% 
   summarise(mean(Num_EV_Stations, na.rm = TRUE),
-  median(combined_df$Num_EV_Stations,na.rm = TRUE))
+  median(combined_df$Num_EV_Stations,na.rm = TRUE),
+  sd(Num_EV_Stations, na.rm = TRUE))
+  
+#create a new categorical variable tracking if a county has more chargers than the median
+#of Washington state
+
+combined_df <- combined_df %>%
+  mutate(above_median = 
+        Num_EV_Stations>summary_df$`median(combined_df$Num_EV_Stations, na.rm = TRUE)`
+  )
+
+#add new numerical variable that provides a percentage for  
