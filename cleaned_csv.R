@@ -35,4 +35,16 @@ refined_charging_stations_df <- refined_charging_stations_df %>%
 # Now, perform the aggregation to count the number of stations per county
 refined_charging_stations_df <- refined_charging_stations_df %>%
   group_by(COUNTY.NAME) %>%
-  summarise(Num_EV_Stations = n(), .groups = 'drop')
+  summarise(Num_EV_Stations = n(), .groups = 'drop')%>%
+  filter(!is.na(COUNTY.NAME))
+
+
+#join stations with EV surroudings
+combined_df <- left_join(ev_sales_washington,refined_charging_stations_df, by = c( "County" = "COUNTY.NAME"))
+
+#create a summary table for findings related to charging station numbers
+
+
+summary_df <- combined_df %>% 
+  summarise(mean(Num_EV_Stations, na.rm = TRUE),
+  median(combined_df$Num_EV_Stations,na.rm = TRUE))
