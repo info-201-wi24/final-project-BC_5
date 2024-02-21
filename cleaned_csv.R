@@ -20,14 +20,17 @@ refined_charging_stations_df <- charging_stations_df %>%
 
 # Select city and county name
 county_city_conversion <- county_city_conversion %>%
-  select(COUNTY.NAME, CITY.NAME)
+  select(COUNTY.NAME, CITY.NAME) %>%
+  group_by(CITY.NAME) %>%
+  summarise(COUNTY.NAME = first(COUNTY.NAME)) 
 
 # Filter for only EVs in WA and select relevant data on EVs
 ev_sales_washington <- ev_sales_washington %>% 
   filter(State == "WA") %>% 
   select(County, Electric.Vehicle..EV..Total, Percent.Electric.Vehicles)
 
-# Join with the county-city conversion to get the county names for each city and remove any NA values
+# Join with the county-city conversion to get the county
+#names for each city and remove any NA values
 refined_charging_stations_df <- refined_charging_stations_df %>%
   left_join(county_city_conversion, by = c("City" = "CITY.NAME")) %>%
   filter(!is.na(COUNTY.NAME))
@@ -37,6 +40,8 @@ refined_charging_stations_df <- refined_charging_stations_df %>%
   group_by(COUNTY.NAME) %>%
   summarise(Num_EV_Stations = n(), .groups = 'drop')%>%
   filter(!is.na(Num_EV_Stations))
+
+
 
 
 #join stations with EV surroudings
