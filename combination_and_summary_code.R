@@ -53,7 +53,7 @@ charging_stations_per_county_df <- refined_charging_stations_county_names %>%
 
 
 #join stations with EV surroudings
-combined_df <- left_join(ev_sales_washington,refined_charging_stations_df, by = c( "County" = "COUNTY.NAME"))
+combined_df <- left_join(ev_sales_washington,charging_stations_per_county_df, by = c( "County" = "COUNTY.NAME"))
 combined_df <- distinct(combined_df, .keep_all = FALSE)
 
 #create a summary table for findings related to charging station numbers
@@ -81,3 +81,4 @@ combined_df<- combined_df %>%
   mutate(percent_EV_stations= 
        round(Num_EV_Stations/total_charger_number*100))
          
+write.csv(combined_df,"Cleaned_CSV")
