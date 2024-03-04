@@ -11,37 +11,45 @@ library(testthat)
 #save in variable
 charging_stations_df <- read.csv("https://data.openei.org/files/106/alt_fuel_stations%20%28Jul%2029%202021%29.csv")
 county_city_conversion <- read.csv("https://data.wa.gov/api/views/g2kf-7usg/rows.csv?accessType=DOWNLOAD")
-ev_sales_washington <- read.csv("https://data.wa.gov/api/views/3d5d-sdqb/rows.csv?accessType=DOWNLOAD")
+ev_sales<- read.csv("https://data.wa.gov/api/views/3d5d-sdqb/rows.csv?accessType=DOWNLOAD")
   
 # Filter for only electric fuel type and stations in Washington
 refined_charging_stations_df <- charging_stations_df %>%
   filter(Fuel.Type.Code == "ELEC" & State == "WA" & str_detect(Groups.With.Access.Code, "^Public")) %>%
   select(Station.Name, City)
 
-# Select city and county name
+# Select City and Countys, select for first county if city in multiple counties
 county_city_conversion <- county_city_conversion %>%
   select(COUNTY.NAME, CITY.NAME) %>%
   group_by(CITY.NAME) %>%
   summarise(COUNTY.NAME = first(COUNTY.NAME)) 
 
 # Filter for only EVs in WA and select relevant data on EVs
-ev_sales_washington <- ev_sales_washington %>% 
-  filter(State == "WA") %>% 
-  select(County, Electric.Vehicle..EV..Total, Percent.Electric.Vehicles)
-
+ev_sales_washington <- ev_sales %>% 
+  filter(State == "WA") %>%
+  filter(Date == "January 31 2024")%>%
+  group_by(County)%>%
+  summarize(
+    EVs_in_County = sum(Electric.Vehicle..EV..Total),
+    Non_EVs_in_county = sum(Non.Electric.Vehicle.Total),
+    Percent_EVs = sum(Percent.Electric.Vehicles)
+)
+ 
 # Join with the county-city conversion to get the county
 #names for each city and remove any NA values
-refined_charging_stations_df <- refined_charging_stations_df %>%
+refined_charging_stations_county_names <- refined_charging_stations_df %>%
   left_join(county_city_conversion, by = c("City" = "CITY.NAME")) %>%
   filter(!is.na(COUNTY.NAME))
 
 # Now, perform the aggregation to count the number of stations per county
-refined_charging_stations_df <- refined_charging_stations_df %>%
+charging_stations_per_county_df <- refined_charging_stations_county_names %>%
   group_by(COUNTY.NAME) %>%
   summarise(Num_EV_Stations = n(), .groups = 'drop')%>%
   filter(!is.na(Num_EV_Stations))
 
 
+# don't reuse variabeles names (normally)
+# make sure before next step, ev_sales_washington has only 1 number per county
 
 
 #join stations with EV surroudings
@@ -71,5 +79,5 @@ total_charger_number <- sum(combined_df$Num_EV_Stations, na.rm = TRUE)
 
 combined_df<- combined_df %>%
   mutate(percent_EV_stations= 
-       Num_EV_Stations/total_charger_number*100)
+       round(Num_EV_Stations/total_charger_number*100))
          
