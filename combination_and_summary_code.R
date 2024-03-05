@@ -5,6 +5,7 @@ rm(list = ls())
 library(dplyr)
 library(stringr)
 library(testthat)
+library(leaflet)
 
 #import in Charging Station data for EVs from data.gov
 #https://data.openei.org/files/106/alt_fuel_stations%20%28Jul%2029%202021%29.csv
@@ -16,13 +17,21 @@ ev_sales<- read.csv("https://data.wa.gov/api/views/3d5d-sdqb/rows.csv?accessType
 # Filter for only electric fuel type and stations in Washington
 refined_charging_stations_df <- charging_stations_df %>%
   filter(Fuel.Type.Code == "ELEC" & State == "WA" & str_detect(Groups.With.Access.Code, "^Public")) %>%
-  select(Station.Name, City)
+  select(Station.Name, City,Longitude,Latitude,Open.Date)
+
+# change filter date based on slider input, giving more stations on map
+charging_stations_with_date <- refined_charging_stations_df %>%
+  mutate(true_date =as.Date(Open.Date))%>%
+  filter(true_date < as.Date("2010-01-01"))
 
 # Select City and Countys, select for first county if city in multiple counties
 county_city_conversion <- county_city_conversion %>%
   select(COUNTY.NAME, CITY.NAME) %>%
   group_by(CITY.NAME) %>%
   summarise(COUNTY.NAME = first(COUNTY.NAME)) 
+
+ev_sales_changed<-ev_sales%>%
+  mutate(true_date = as.Date(Date,format = "%B %m %Y"))
 
 # Filter for only EVs in WA and select relevant data on EVs
 ev_sales_washington <- ev_sales %>% 
@@ -44,9 +53,10 @@ refined_charging_stations_county_names <- refined_charging_stations_df %>%
 # Now, perform the aggregation to count the number of stations per county
 charging_stations_per_county_df <- refined_charging_stations_county_names %>%
   group_by(COUNTY.NAME) %>%
-  summarise(Num_EV_Stations = n(), .groups = 'drop')%>%
-  filter(!is.na(Num_EV_Stations))
-
+  mutate(Num_EV_Stations = n(),
+            Longitude = first(Longitude),
+            Latitude = first(Latitude)
+            )
 
 # don't reuse variabeles names (normally)
 # make sure before next step, ev_sales_washington has only 1 number per county
@@ -82,3 +92,24 @@ combined_df<- combined_df %>%
        round(Num_EV_Stations/total_charger_number*100))
          
 write.csv(combined_df,"Cleaned_CSV")
+
+# Create a Leaflet map of new building construction by category
+leaflet(data = combined_df) %>%
+  addProviderTiles("CartoDB.Positron") %>%
+  setView(lng = -122.3321, lat = 47.6062, zoom = 5.5) %>%
+  addCircles(
+    lat = ~Latitude, # specify the column for `lat` as a formula
+    lng = ~Longitude, # specify the column for `lng` as a formula
+    stroke = FALSE, # remove border from each circle
+    popup = ~County, # show the description in a popup
+    #color = ~palette_fn(), # a "function of" the palette mapping
+    radius = ~EVs_in_County * 0.3,
+    fillOpacity = 0.01
+  ) %>%
+  addLegend(
+    position = "bottomright",
+    title = "EVs Stations in Washington",
+    pal = palette_fn, # the palette to label
+    #values = ~PermitClass, # the values to label
+    opacity = 1
+  )
