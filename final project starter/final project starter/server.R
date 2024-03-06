@@ -4,6 +4,7 @@ library(leaflet)
 library(stringr)
 library("plotly")
 
+
 charging_stations_df <-  read.csv("charging_stations_df.csv")
 
 refined_charging_stations_df <- charging_stations_df %>%
@@ -34,7 +35,7 @@ server <- function(input, output, session){
     # Create Leaflet map
     leaflet(data = filtered_df) %>%
       addProviderTiles("CartoDB.Positron") %>%
-      setView(lng = -122.3321, lat = 47.6062, zoom = 8) %>%
+      setView(lng = -120.7401, lat = 47.7511, zoom = 5.5) %>%
       addCircles(
         lat = ~Latitude, # specify the column for `lat` as a formula
         lng = ~Longitude, # specify the column for `lng` as a formula
@@ -59,6 +60,7 @@ server <- function(input, output, session){
           x = "Date",
           title = "# of Stations Over Time"
         )
+    
   })
 
   filtered_data <- reactive({

@@ -1,6 +1,13 @@
 library(shiny)
 library(leaflet)
 library(bslib)
+library(dplyr)
+library(ggplot2)
+library(leaflet)
+library(stringr)
+library("plotly")
+
+combined_df <- read.csv("Charging.csv")
 
 ## OVERVIEW TAB INFO
 
@@ -15,12 +22,12 @@ viz_1_sidebar <- sidebarPanel(
   img(src = "Tesla.jpg"),
   h2("Pick a Date:"),
   sliderInput("date", "Select Date:",
-              min = as.Date("2008-01-01"), # Set minimum date
+              min = as.Date("2009-01-01"), # Set minimum date
               max = as.Date("2024-12-31"), # Set maximum date
-              value = as.Date("2015-10-23"), # Set initial date
+              value = as.Date("2017-01-24"), # Set initial date
               step = 31 # Set step size (31 days)
   ),
-  p("Ever since record keeping for charging stations began in 2008, charging 
+  p("Ever since record keeping for charging stations began in 2009, charging 
     stations have only grown", em("exponetially"), " on paper. Despite this however,\
     in reality 'public' charging infrastruce has remained clustered within the 
     King county area, heavily skewing numbers while providing true 
