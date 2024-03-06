@@ -18,7 +18,12 @@ viz_1_sidebar <- sidebarPanel(
               max = as.Date("2024-12-31"), # Set maximum date
               value = as.Date("2015-10-23"), # Set initial date
               step = 31 # Set step size (31 days)
-  )
+  ),
+  p("Ever since record keeping for charging stations began in 2008, charging 
+    stations have only grown", em("exponetially"), " on paper. Despite this however,\
+    in reality 'public' charging infrastruce has remained clustered within the 
+    King county area, heavily skewing numbers while providing true charging
+    access to a select few.")
 )
 
 viz_1_main_panel <- mainPanel(
