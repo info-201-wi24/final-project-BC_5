@@ -13,7 +13,6 @@ overview_tab <- tabPanel("Overview Tab Title",
 ## VIZ 1 TAB INFO
 
 viz_1_sidebar <- sidebarPanel(
-  theme = bs_theme(version = 4, bootswatch = "minty"),
   h2("Pick a Date:"),
   viz_1_sidebar <- sidebarPanel(
     dateInput("date",
