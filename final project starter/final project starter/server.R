@@ -12,6 +12,12 @@ refined_charging_stations_df <- charging_stations_df %>%
 # change filter date based on slider input, giving more stations on map
 charging_stations_with_date <- refined_charging_stations_df %>%
   mutate(true_date =as.Date(Open.Date))
+
+culm_stations <- charging_stations_with_date %>%
+  group_by(true_date) %>%
+  summarise(total_stations = n()) %>%
+  mutate(total_stations = cumsum(total_stations))
+
 server <- function(input, output) {
   
   output$viz_1_map <- renderLeaflet({
@@ -35,4 +41,11 @@ server <- function(input, output) {
         color = ~palette_fn(filtered_df[["City"]]) #Color stations by their city.
       )
   })
+  ggplot(culm_stations)+
+    geom_smooth(
+      mapping = aes(
+        x = true_date,
+        y=total_stations
+      )
+    )
 }
