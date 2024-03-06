@@ -94,19 +94,19 @@ combined_df<- combined_df %>%
 write.csv(combined_df,"Cleaned_CSV")
 
 # Create a Leaflet map of new building construction by category
-leaflet(data = combined_df) %>%
+leaflet(data = refined_charging_stations_df) %>%
   addProviderTiles("CartoDB.Positron") %>%
   setView(lng = -122.3321, lat = 47.6062, zoom = 5.5) %>%
   addCircles(
     lat = ~Latitude, # specify the column for `lat` as a formula
     lng = ~Longitude, # specify the column for `lng` as a formula
     stroke = FALSE, # remove border from each circle
-    popup = ~County, # show the description in a popup
+    #popup = ~County, #z show the description in a popup
     #color = ~palette_fn(), # a "function of" the palette mapping
-    radius = ~EVs_in_County * 0.3,
-    fillOpacity = 0.01
+    radius = 5,
+    fillOpacity = 1
   ) %>%
-  addLegend(
+ # addLegend(
     position = "bottomright",
     title = "EVs Stations in Washington",
     pal = palette_fn, # the palette to label
