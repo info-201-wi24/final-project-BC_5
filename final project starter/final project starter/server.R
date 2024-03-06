@@ -4,7 +4,7 @@ library(leaflet)
 library(stringr)
 library("plotly")
 
-charging_stations_df <- read.csv("https://data.openei.org/files/106/alt_fuel_stations%20%28Jul%2029%202021%29.csv")
+charging_stations_df <-  read.csv("charging_stations_df.csv")
 
 refined_charging_stations_df <- charging_stations_df %>%
   filter(Fuel.Type.Code == "ELEC" & State == "WA" & str_detect(Groups.With.Access.Code, "^Public")) %>%
@@ -20,7 +20,7 @@ culm_stations <- charging_stations_with_date %>%
   mutate(total_stations = cumsum(total_stations))
 
 # TODO Make outputs based on the UI inputs here
-combined_df <- read.csv("https://raw.githubusercontent.com/info-201-wi24/final-project-BC_5/main/Charging.csv")
+combined_df <- read.csv("Charging.csv")
 
 server <- function(input, output, session){
   # Tab 1.
