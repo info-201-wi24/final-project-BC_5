@@ -30,15 +30,17 @@ viz_1_tab <- tabPanel("Viz 1 tab title",
 
 viz_2_sidebar <- sidebarPanel(
   h2("Options for graph"),
-  #TODO: Put inputs for modifying graph here
+  checkboxGroupInput("county_checkbox", "Select Counties",
+                     choices = unique(combined_df$County),
+                     selected = unique(combined_df$County)[1]),
 )
 
 viz_2_main_panel <- mainPanel(
-  h2("Vizualization 2 Title"),
-  # plotlyOutput(outputId = "your_viz_1_output_id")
+  h2("WA Counties Ev Adoption"),
+  plotlyOutput(outputId = "your_viz_1_output_id")
 )
 
-viz_2_tab <- tabPanel("Viz 2 tab title",
+viz_2_tab <- tabPanel("EV vs Gas Cars in WA",
   sidebarLayout(
     viz_2_sidebar,
     viz_2_main_panel
@@ -49,15 +51,18 @@ viz_2_tab <- tabPanel("Viz 2 tab title",
 
 viz_3_sidebar <- sidebarPanel(
   h2("Options for graph"),
-  #TODO: Put inputs for modifying graph here
+  checkboxGroupInput("checkbox_county", "Select Counties",
+                     choices = unique(combined_df$County),
+                     selected = unique(combined_df$County)[1]),
 )
 
 viz_3_main_panel <- mainPanel(
-  h2("Vizualization 3 Title"),
-  # plotlyOutput(outputId = "your_viz_1_output_id")
+  h2("Charging Stations Vs EV Use by County"),
+  plotlyOutput(outputId = "graph1"),
+  plotlyOutput(outputId = "graph2")
 )
 
-viz_3_tab <- tabPanel("Viz 3 tab title",
+viz_3_tab <- tabPanel("Charging Stations Vs EV Adoption",
   sidebarLayout(
     viz_3_sidebar,
     viz_3_main_panel
