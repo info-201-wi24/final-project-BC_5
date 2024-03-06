@@ -29,6 +29,7 @@ server <- function(input, output) {
         stroke = FALSE, # remove border from each circle
         radius = 10,
         fillOpacity = .5,
+        popup = ~Station.Name,
         color = "Red"
       )
   })

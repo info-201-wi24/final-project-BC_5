@@ -14,14 +14,12 @@ overview_tab <- tabPanel("Overview Tab Title",
 
 viz_1_sidebar <- sidebarPanel(
   h2("Pick a Date:"),
-  viz_1_sidebar <- sidebarPanel(
-    dateInput("date",
-              "Select Date:", 
-              value = "2022-01-01", 
-              format = "mm/dd/yyyy",
-              min =   "2015-01-01",
-              max = "2024-01-01")
-    )
+  sliderInput("date", "Select Date:",
+              min = as.Date("2008-01-01"), # Set minimum date
+              max = as.Date("2024-12-31"), # Set maximum date
+              value = as.Date("2015-10-23"), # Set initial date
+              step = 31 # Set step size (31 days)
+  )
 )
 
 viz_1_main_panel <- mainPanel(
