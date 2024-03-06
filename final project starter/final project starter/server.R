@@ -15,7 +15,6 @@ charging_stations_with_date <- refined_charging_stations_df %>%
   mutate(true_date =as.Date(Open.Date))
 
 culm_stations <- charging_stations_with_date %>%
-  na.omit() %>%
   group_by(true_date) %>%
   summarise(total_stations = n()) %>%
   mutate(total_stations = cumsum(total_stations))
@@ -35,7 +34,7 @@ server <- function(input, output, session){
     # Create Leaflet map
     leaflet(data = filtered_df) %>%
       addProviderTiles("CartoDB.Positron") %>%
-      setView(lng = -122.3321, lat = 47.6062, zoom = 5.5) %>%
+      setView(lng = -122.3321, lat = 47.6062, zoom = 8) %>%
       addCircles(
         lat = ~Latitude, # specify the column for `lat` as a formula
         lng = ~Longitude, # specify the column for `lng` as a formula
@@ -46,12 +45,21 @@ server <- function(input, output, session){
         color = ~palette_fn(filtered_df[["City"]]) #Color stations by their city.
       )
   })
-  # ggplot(culm_stations)+
-  #   geom_smooth(
-  #     mapping = aes(
-  #       x = true_date,
-  #       y=total_stations
-  #     ))
+  
+  output$viz_1_culm_plot <- renderPlot({
+  ggplot(culm_stations)+
+        geom_smooth(
+          mapping = aes(
+            x = true_date,
+            y=total_stations,
+            text = total_stations
+          ))+
+        labs(
+          y = "Total Stations",
+          x = "Date",
+          title = "# of Stations Over Time"
+        )
+  })
 
   filtered_data <- reactive({
     select_counties <- input$county_checkbox

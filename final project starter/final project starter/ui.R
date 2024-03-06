@@ -23,8 +23,13 @@ viz_1_sidebar <- sidebarPanel(
 )
 
 viz_1_main_panel <- mainPanel(
-  h2("Map of Washington"),
-  leafletOutput(outputId = "viz_1_map")    
+  fluidRow(
+    h3("Map of EV Charging Stations Over Time"),
+    column(12,leafletOutput(outputId = "viz_1_map")),
+    p("  "),
+    h3("Charging Stations Built Over Time"),
+    column(12, plotOutput("viz_1_culm_plot"))
+  )
 )
 
 viz_1_tab <- tabPanel("Charging Stations Mapped",
@@ -84,7 +89,8 @@ conclusion_tab <- tabPanel("Conclusion Tab Title",
  p("some conclusions")
 )
 
-ui <- navbarPage("Example Project Title",
+ui <- navbarPage("The Link Between Charging Stations and EV Ownership",
+  theme = bs_theme(version = 4, bootswatch = "minty"),
   overview_tab,
   viz_1_tab,
   viz_2_tab,
