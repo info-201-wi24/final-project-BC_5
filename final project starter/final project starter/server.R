@@ -19,6 +19,8 @@ server <- function(input, output) {
     filtered_df <- charging_stations_with_date %>%
       filter(true_date <= input$date)
     
+    palette_fn <- colorFactor(palette = "Paired", domain = filtered_df[["City"]])
+    
     # Create Leaflet map
     leaflet(data = filtered_df) %>%
       addProviderTiles("CartoDB.Positron") %>%
@@ -27,10 +29,10 @@ server <- function(input, output) {
         lat = ~Latitude, # specify the column for `lat` as a formula
         lng = ~Longitude, # specify the column for `lng` as a formula
         stroke = FALSE, # remove border from each circle
-        radius = 10,
-        fillOpacity = .5,
-        popup = ~Station.Name,
-        color = "Red"
+        radius = 50,
+        fillOpacity = 1,
+        label = ~Station.Name,
+        color = ~palette_fn(filtered_df[["City"]]) #Color stations by their city.
       )
   })
 }
