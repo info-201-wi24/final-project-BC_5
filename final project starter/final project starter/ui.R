@@ -12,6 +12,7 @@ overview_tab <- tabPanel("Overview Tab Title",
 ## VIZ 1 TAB INFO
 
 viz_1_sidebar <- sidebarPanel(
+  img(src = "Tesla.jpg"),
   h2("Pick a Date:"),
   sliderInput("date", "Select Date:",
               min = as.Date("2008-01-01"), # Set minimum date
@@ -22,8 +23,8 @@ viz_1_sidebar <- sidebarPanel(
   p("Ever since record keeping for charging stations began in 2008, charging 
     stations have only grown", em("exponetially"), " on paper. Despite this however,\
     in reality 'public' charging infrastruce has remained clustered within the 
-    King county area, heavily skewing numbers while providing true charging
-    access to a select few.")
+    King county area, heavily skewing numbers while providing true 
+    access to only a select few.")
 )
 
 viz_1_main_panel <- mainPanel(
