@@ -1,7 +1,7 @@
 ## How Charging Stations Affect EV Adoption
 ## INFO 201 "Foundational Skills for Data Science"
-
-Authors: George Lee
+Group BC-5
+Authors: George Lee , Marc, Panav
 
 
 For the Final Project -- Data Wrangling, add the following to this code repository:
