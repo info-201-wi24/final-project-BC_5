@@ -3,25 +3,11 @@
 Group BC-5
 Authors: George Lee , Marc, Panav
 
+**(https://georgelee.shinyapps.io/EVAdoptionAndChargingStations/_w_b46eaf79/#tab-8762-1)**
 
-For the Final Project -- Data Wrangling, add the following to this code repository:
-
-* An R script file containing the code you used to create your unified dataset 
-* Your unified and cleaned CSV dataset file
-* Data Nutrition Label (pdf) 
-
-
-**Link: Link to your Shiny App here**
-
-Please create the necessary files for your multi-page Shiny app in this GitHub repository. Consult the Canvas assignment for more details. Be sure to publish your app on Shinyapps.io.
-
-When you are finished, please add the text from your introductory and concluding pages below. You might want to use this GitHub repository as part of your digital portfolio, so you want this README.md to offer a brief description of the project and key takeaways.
-
-Feel free to delete these instructions for your final README.md file and to make your GitHub repository public if you would like others to be able to see it. 
 
 # Introduction
-
-
+Electric vehicles (EVs) have recently emerged as a frontrunner to addressing the environmental impacts of using fossil fuels for transportation. Despite this however, falling consumer demand, slowing production and other woes have continued to plauge this new market. To better understand EV adoption rates and the factors influencing consumers' decision to switch to EVs, we analyzed datasets on EV charging station availability in Washington State, along with car registrations with the Washington State Department of Transportation get a better picture of what is possibliy happening.
 
 # Conclusion / Summary Takeaways
-
+As it turns out, areas with higher amounts of charging capacity such as Chelan and Clallam are correlated with higher EV adoption as well. Although with this data along causation cannont be proven, this vaulable visualzation can help provide insight on where to start looking.
